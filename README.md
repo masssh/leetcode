@@ -1,3 +1,4 @@
+[![](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![](https://circleci.com/gh/masssh/leetcode.svg?style=shield&circle-token=c1caac51446e2983392d4b6e9ffdee873c76b99a)](https://circleci.com/gh/masssh/leetcode)
 [![](https://codecov.io/gh/masssh/leetcode/branch/master/graph/badge.svg)](https://codecov.io/gh/masssh/leetcode)
 [![](https://snyk.io/test/github/masssh/leetcode/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/masssh/leetcode?targetFile=build.gradle)
