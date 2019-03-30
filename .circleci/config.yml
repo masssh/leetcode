@@ -38,12 +38,13 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: ./gradlew test
-
-      - run: ./gradlew jacocoTestReport
+      - run: ./gradlew test jacocoTestReport
 
       - store_test_results:
           path: build/test-results
 
       - store_artifacts:
           path: build/reports
+
+      - codecov/upload:
+          file: build/reports/jacoco/test/jacocoTestReport.xml
