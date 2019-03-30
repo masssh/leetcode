@@ -1,2 +1,2 @@
-# leetcode
+# gradle-boilerplate
 leetcode practices

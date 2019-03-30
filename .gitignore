@@ -1,0 +1,14 @@
+# Gradle
+.gradle
+.gradle.user.home
+/build/
+/out/
+
+# Intellij
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/gradle.xml
+.idea/**/libraries
