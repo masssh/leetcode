@@ -44,6 +44,8 @@ jobs:
 
       - run: ./gradlew test jacocoTestReport
 
+      - run: ./gradlew sonarqube -Dsonar.projectKey=masssh_leetcode -Dsonar.organization=masssh-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARQUBE_TOKEN
+
       - store_test_results:
           path: build/test-results
 
