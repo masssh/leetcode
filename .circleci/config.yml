@@ -40,12 +40,7 @@ jobs:
 
       - run: ./gradlew test
 
-      #      - run:
-      #          name: Save Test Results
-      #          command: |
-      #            mkdir -p ~/junit/
-      #            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
-      #          when: always
+      - run: ./gradlew jacocoTestReport
 
       - store_test_results:
           path: build/test-results
