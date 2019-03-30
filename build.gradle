@@ -50,7 +50,6 @@ compileTestKotlin {
 
 test {
     useJUnitPlatform()
-    finalizedBy(jacocoTestReport)
 }
 
 jacoco {

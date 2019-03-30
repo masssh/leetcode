@@ -40,18 +40,15 @@ jobs:
 
       - run: ./gradlew test
 
-      - run:
-          name: Save Test Results
-          command: |
-            mkdir -p ~/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
-            mkdir -p $CIRCLE_TEST_REPORTS/jacoco/
-            cp -r ./build/reports/jacoco/test/* $CIRCLE_TEST_REPORTS/jacoco
-            bash <(curl -s https://codecov.io/bash)
-          when: always
+      #      - run:
+      #          name: Save Test Results
+      #          command: |
+      #            mkdir -p ~/junit/
+      #            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+      #          when: always
 
       - store_test_results:
-          path: ~/junit
+          path: build/test-results
 
       - store_artifacts:
-          path: ~/junit
+          path: build/reports
