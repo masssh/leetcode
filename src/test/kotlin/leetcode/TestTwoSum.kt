@@ -1,24 +1,21 @@
 package leetcode
 
-import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
+import org.amshove.kluent.`should equal`
 import org.junit.jupiter.api.Test
 
-class TestTwoSum {
+class TestTwoSum : TestBase() {
 
-    lateinit var twoSum: TwoSum
-
-    @BeforeEach
-    fun beforeEach() {
-        twoSum = TwoSum()
-    }
+    @Suppress("ArrayInDataClass")
+    data class TwoSumParam(val num: IntArray, val target: Int, val expected: IntArray)
 
     @Test
-    fun shouldReturnIntArray() {
-        val num = intArrayOf(1, 2, 3)
-        val target = 5
-        val actual = twoSum.twoSum(num, target)
-        val expected = intArrayOf(1, 2)
-        assertThat(actual).isEqualTo(expected)
+    fun with2Params() {
+        val twoSum = TwoSum()
+
+        listOf(
+            TwoSumParam(intArrayOf(1, 2), 3, intArrayOf(0, 1))
+        ).forEach { (num, target, expected) ->
+            twoSum.twoSum(num, target) `should equal` expected
+        }
     }
 }

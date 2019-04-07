@@ -1,6 +1,7 @@
 buildscript {
 
     repositories {
+        mavenCentral()
         jcenter()
     }
 
@@ -11,16 +12,14 @@ buildscript {
 }
 
 plugins {
-    // id 'java'
-    id "java-library"
     id "org.jetbrains.kotlin.jvm" version "1.3.21"
-    // id 'application'
     id "jacoco"
     id "checkstyle"
     id "org.sonarqube" version "2.7"
 }
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -28,19 +27,86 @@ configurations {
     ktlint
 }
 
+sourceSets {
+    jmh {}
+}
+
 dependencies {
     ktlint "com.github.shyiko:ktlint:0.31.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testImplementation project.sourceSets.main.output
     testRuntime "org.junit.jupiter:junit-jupiter-engine:5.4.1"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.1"
-    testImplementation "org.assertj:assertj-core:3.12.2"
-    testImplementation 'org.jacoco:org.jacoco.build:0.8.3'
+    testImplementation "org.amshove.kluent:kluent:1.49"
+    testImplementation "org.jacoco:org.jacoco.build:0.8.3"
+    testImplementation "io.github.microutils:kotlin-logging:1.6.24"
+    testImplementation "org.slf4j:slf4j-api:1.7.26"
+    testImplementation "ch.qos.logback:logback-classic:1.2.3"
+
+    jmhCompile project
+    jmhCompile "org.openjdk.jmh:jmh-core:1.21"
+    jmhCompile "org.openjdk.jmh:jmh-generator-annprocess:1.21"
+    jmhCompile "org.openjdk.jmh:jmh-generator-bytecode:1.21"
 }
 
 allprojects {}
 
 subprojects {}
+
+task generateJmhByteCode(dependsOn: "build", type: JavaExec) {
+    classpath = sourceSets.jmh.runtimeClasspath
+    main = "org.openjdk.jmh.generators.bytecode.JmhBytecodeGenerator"
+    args "build/classes/kotlin/jmh"
+    args "build/jmh-generated-resources"
+    args "build/jmh-generated-resources"
+    args "default"
+}
+
+task compileJmhByteCode(dependsOn: "generateJmhByteCode", type: JavaCompile) {
+    source = fileTree(dir: "build/jmh-generated-resources", include: "**/*.java")
+    destinationDir = file("build/classes/kotlin/jmh")
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+    classpath = sourceSets.jmh.runtimeClasspath
+}
+
+task jmh(dependsOn: "compileJmhByteCode", type: JavaExec, description: "Executing JMH benchmarks") {
+    classpath = files(sourceSets.jmh.runtimeClasspath, "build/jmh-generated-resources")
+    main = "org.openjdk.jmh.Main"
+
+    def include = project.properties.get("include", ".*")
+    def exclude = project.properties.get("exclude")
+    def format = project.properties.get("format", "json")
+    def profilers = project.properties.get("profilers")
+    def jvmArgs = project.properties.get("jvmArgs")
+    def resultFile = file("build/reports/jmh/result.${format}")
+
+    args include
+    if (exclude) {
+        args "-e", exclude
+    }
+    args "-foe", "true"   //fail-on-error
+    args "-v", "NORMAL"   //verbosity [SILENT, NORMAL, EXTRA]
+    if (profilers) {
+        profilers.split(",").each {
+            args "-prof", it
+        }
+    }
+    args "-jvmArgsPrepend", "-Xmx3072m"
+    args "-jvmArgsPrepend", "-Xms3072m"
+    if (jvmArgs) {
+        for (jvmArg in jvmArgs.split(" ")) {
+            args "-jvmArgsPrepend", jvmArg
+        }
+    }
+    args "-rf", format
+    args "-rff", resultFile
+    doFirst {
+        println "\nExecuting JMH with: $args \n"
+        resultFile.parentFile.mkdirs()
+    }
+}
 
 test {
     useJUnitPlatform()
@@ -64,6 +130,7 @@ compileKotlin {
         jvmTarget = "1.8"
     }
 }
+
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
