@@ -15,3 +15,15 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=masssh_leetcode&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=masssh_leetcode)
 
 # Leetcode Practices with kotlin
+
+This is my work in [Leet Code](https://leetcode.com/) with kotlin.
+
+## Feature
+
+This repository includes a suite of basic kotlin development environment with gradle.
+
+- Gradle support (gradle user home is separated from your home directory)
+- CircleCI config is ready
+- JMH micro-benchmark support, integrated with gradle task
+- JUnit (written by kotlin) and jacoco coverage report support
+- kotlint support, with Intellij IDEA setting
