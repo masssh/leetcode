@@ -1,4 +1,4 @@
-package leetcode
+package masssh.leetcode
 
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.times
@@ -36,7 +36,7 @@ class TestTwoSum : TestBase() {
         // fail
         listOf(
             TwoSumParam(intArrayOf(1, 2), 4, intArrayOf(0, 1))
-        ).forEach { (num, target, expected) ->
+        ).forEach { (num, target) ->
             { twoSum.doubleLoop(num, target) } shouldThrow IllegalArgumentException::class
         }
     }
@@ -57,8 +57,8 @@ class TestTwoSum : TestBase() {
         // fail
         listOf(
             TwoSumParam(intArrayOf(1, 2), 4, intArrayOf(0, 1))
-        ).forEach { (num, target, expected) ->
-            { twoSum.doubleLoop(num, target) } shouldThrow IllegalArgumentException::class
+        ).forEach { (num, target) ->
+            { twoSum.indexOf(num, target) } shouldThrow IllegalArgumentException::class
         }
     }
 
@@ -78,7 +78,7 @@ class TestTwoSum : TestBase() {
         // fail
         listOf(
             TwoSumParam(intArrayOf(1, 2), 4, intArrayOf(0, 1))
-        ).forEach { (num, target, expected) ->
+        ).forEach { (num, target) ->
             { twoSum.doubleLoop(num, target) } shouldThrow IllegalArgumentException::class
         }
     }

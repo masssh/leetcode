@@ -1,4 +1,4 @@
-package leetcode
+package masssh.leetcode
 
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.BenchmarkMode

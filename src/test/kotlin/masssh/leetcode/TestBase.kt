@@ -1,4 +1,4 @@
-package leetcode
+package masssh.leetcode
 
 import mu.KotlinLogging
 

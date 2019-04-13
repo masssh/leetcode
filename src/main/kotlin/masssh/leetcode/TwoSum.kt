@@ -1,4 +1,4 @@
-package leetcode
+package masssh.leetcode
 
 open class TwoSum {
 
@@ -18,7 +18,7 @@ open class TwoSum {
     open fun indexOf(num: IntArray, target: Int): IntArray {
         for (i in 0 until num.size) {
             val j = num.indexOf(target - num[i])
-            if (j >= 0) return intArrayOf(i, j)
+            if (j >= 0 && i != j) return intArrayOf(i, j)
         }
         throw IllegalArgumentException("No combination of numbers found")
     }
