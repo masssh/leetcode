@@ -45,6 +45,7 @@ dependencies {
     testImplementation "ch.qos.logback:logback-classic:1.2.3"
 
     jmhCompile project
+    jmhCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     jmhCompile "org.openjdk.jmh:jmh-core:1.21"
     jmhCompile "org.openjdk.jmh:jmh-generator-annprocess:1.21"
     jmhCompile "org.openjdk.jmh:jmh-generator-bytecode:1.21"
@@ -54,7 +55,11 @@ allprojects {}
 
 subprojects {}
 
-task generateJmhByteCode(dependsOn: "build", type: JavaExec) {
+task cleanJmhSource() {
+    delete "build/jmh-generated-resources"
+}
+
+task generateJmhSource(dependsOn: ["build", "cleanJmhSource"], type: JavaExec) {
     classpath = sourceSets.jmh.runtimeClasspath
     main = "org.openjdk.jmh.generators.bytecode.JmhBytecodeGenerator"
     args "build/classes/kotlin/jmh"
@@ -63,7 +68,7 @@ task generateJmhByteCode(dependsOn: "build", type: JavaExec) {
     args "default"
 }
 
-task compileJmhByteCode(dependsOn: "generateJmhByteCode", type: JavaCompile) {
+task compileJmhSource(dependsOn: "generateJmhSource", type: JavaCompile) {
     source = fileTree(dir: "build/jmh-generated-resources", include: "**/*.java")
     destinationDir = file("build/classes/kotlin/jmh")
     sourceCompatibility = "1.8"
@@ -71,7 +76,7 @@ task compileJmhByteCode(dependsOn: "generateJmhByteCode", type: JavaCompile) {
     classpath = sourceSets.jmh.runtimeClasspath
 }
 
-task jmh(dependsOn: "compileJmhByteCode", type: JavaExec, description: "Executing JMH benchmarks") {
+task jmh(dependsOn: ["compileJmhSource", "test"], type: JavaExec, description: "Executing JMH benchmarks") {
     classpath = files(sourceSets.jmh.runtimeClasspath, "build/jmh-generated-resources")
     main = "org.openjdk.jmh.Main"
 
@@ -102,6 +107,9 @@ task jmh(dependsOn: "compileJmhByteCode", type: JavaExec, description: "Executin
     }
     args "-rf", format
     args "-rff", resultFile
+    args "-i", 5
+    args "-wi", 5
+    args "-f", 1
     doFirst {
         println "\nExecuting JMH with: $args \n"
         resultFile.parentFile.mkdirs()

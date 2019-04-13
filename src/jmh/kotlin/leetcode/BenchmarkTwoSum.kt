@@ -14,8 +14,34 @@ import java.util.concurrent.TimeUnit
 open class BenchmarkTwoSum {
 
     @Benchmark
-    fun twoSum() {
+    fun doubleLoop_10000() {
+        val num = (-5000..5000).toList().toIntArray()
+        val target = 61000
         val twoSum = TwoSum()
-        twoSum.twoSum(intArrayOf(1, 2), 3)
+        twoSum.doubleLoop(num, target)
+    }
+
+    @Benchmark
+    fun indexOf_10000() {
+        val num = (-5000..5000).toList().toIntArray()
+        val target = 6100
+        val twoSum = TwoSum()
+        twoSum.indexOf(num, target)
+    }
+
+    @Benchmark
+    fun parallelIndexOf_10000() {
+        val num = (-5000..5000).toList().toIntArray()
+        val target = 6100
+        val twoSum = TwoSum()
+        twoSum.parallelIndexOf(num, target)
+    }
+
+    @Benchmark
+    fun hybrid_10000() {
+        val num = (-5000..5000).toList().toIntArray()
+        val target = 6100
+        val twoSum = TwoSum()
+        twoSum.hybrid(num, target)
     }
 }
